@@ -9,8 +9,8 @@ static void set_flags(char *str, unsigned *flags)
 	i = 1;
 	while (*(str + i) && !(*flags & FLAG_FAIL) && !(*flags & FLG_LWR_H))
 	{
-		flag = (!(s = strchr(FLAGS, *(str + i))) ? \
-						FLAG_FAIL : 1 << (s - FLAGS));
+		flag = ((s = strchr(FLAGS, *(str + i))) ? \
+						1 << (s - FLAGS) : FLAG_FAIL);
 		if (flag & FLAGS_SORT)
 			*flags = *flags & FLAG_TO_NULL_SORT | flag;
 		else if (flag & FLAG_LONG_LIST)
@@ -64,21 +64,35 @@ static t_ls	*get_fresh_ls(void)
 		return (NULL);
 	}
 	ls->stack = NULL;
-	ls->func = NULL;
 	ls->flags = FLAG_DEFAULT;
 	return (ls);
 }
 
-t_ls	*init_ls(int ac, char **av)
+static void	set_sort_func(t_ls *ls)
+{
+	if (ls->flags & FLG_LWR_V)
+		ls->func = strcmp;
+	else if (ls->flags & FLG_LWR_T)
+		ls->func = NULL;
+	else if (ls->flags & FLG_UPR_S)
+		ls->func = NULL;
+	else if (ls->flags & FLG_LWR_F)
+		ls->func = NULL;
+	else if (ls->flags & FLG_LWR_Y)
+		ls->func = NULL;
+}
+
+t_ls		*init_ls(int ac, char **av)
 {
 	t_ls	*ls;
 
 	if (!(ls = get_fresh_ls()))
 		ft_exit(1, NULL);
 	search_flags(ac, av, &ls->flags);
-	if (&ls->flags & FLAG_FAIL)
+	if (ls->flags & FLAG_FAIL)
 		ft_exit(2, ls);
-	if (&ls->flags * FLG_LWR_H)
+	if (ls->flags & FLG_LWR_H)
 		ft_exit(3, ls);
+	set_sort_func(ls);
 	return (ls);
 }
