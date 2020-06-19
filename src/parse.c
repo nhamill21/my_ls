@@ -34,10 +34,13 @@ static void	search_flags(int ac, char **av, unsigned *flags)
 	i = 1;
 	while (i < ac)
 	{
-		if (*(av + i) && *(*(av + i)) == '-')
+		if (*(av + i) && *(*(av + i)) == '-' && *(*(av + i) + 1))
 		{
 			if (*(*(av + i) + 1) == '-')
+			{
+				*(av + i) = NULL;
 				break ;
+			}
 			set_flags(*(av + i), flags);
 			if (*flags & FLAG_FAIL)
 				printf("%s%s%s\n", ERR_FLAG_FAIL, *(av + i), ERR_HELP);
@@ -82,6 +85,26 @@ static void	set_sort_func(t_ls *ls)
 		ls->func = NULL;
 }
 
+static void	set_first_args(int ac, char **av, t_ls *ls)
+{
+	size_t	i;
+	t_heap	*heap;
+
+	i = 1;
+	heap = NULL;
+	while (i < ac)
+	{
+		if (*(av + i))
+			if (add_heap_elem(&heap, *(av + i), ls->func))
+				ft_exit(4, ls);
+		i++;
+	}
+	if (!heap)
+		if (add_heap_elem(&heap, ".", NULL))
+			ft_exit(4, ls);
+	push_stack(&ls->stack, heap);
+}
+
 t_ls		*init_ls(int ac, char **av)
 {
 	t_ls	*ls;
@@ -94,5 +117,6 @@ t_ls		*init_ls(int ac, char **av)
 	if (ls->flags & FLG_LWR_H)
 		ft_exit(3, ls);
 	set_sort_func(ls);
+	set_first_args(ac, av, ls);
 	return (ls);
 }

@@ -75,10 +75,38 @@ enum	e_position_flag_bits {
 # define SEP_STD "\n"
 # define SEP_FLAG_M ", "
 
-typedef struct		s_stack {
+typedef struct		s_heap {
+	char			**arr;
+	int				first;
+	int				last;
+	int				size;
+}					t_heap;
+
+# define START_HEAP_SIZE 1
+# define COEF_HEAP_INC 2
+
+void 		*get_heap_max(t_heap *heap, int (*f)(const char *, const char *));
+void		heap_sort(t_heap *heap, int (*f)(const char *, const char *));
+int			add_heap_elem(t_heap **heap, char *data, \
+										int (*f)(const char *, const char *));
+
+typedef struct		s_list {
 	void 			*data;
 	struct s_stack	*next;
+}					t_list;
+
+t_list	*ft_lstnew(void *data);
+void 	ft_lstadd(t_list **alst, t_list *new);
+void 	ft_lstdelone(t_list **del);
+
+typedef struct		s_stack {
+	t_heap			*data;
+	struct s_stack	*next;
 }					t_stack;
+
+t_heap	*get_stack(t_stack *stack);
+void 	push_stack(t_stack **stack, void *data);
+void 	pop_stack(t_stack **stack);
 
 typedef struct		s_ls {
 	unsigned		flags;
@@ -88,5 +116,8 @@ typedef struct		s_ls {
 
 t_ls	*init_ls(int ac, char **av);
 int		ft_exit(int status, t_ls *ls);
+
+
+void 	print_log(unsigned flag);
 
 #endif
