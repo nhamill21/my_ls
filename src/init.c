@@ -102,7 +102,7 @@ static void	set_first_args(int ac, char **av, t_ls *ls)
 	if (!heap)
 		if (add_heap_elem(&heap, ".", NULL))
 			ft_exit(4, ls);
-	push_stack(&ls->stack, heap);
+	push_stack(&ls->stack, new_stack(heap));
 }
 
 t_ls		*init_ls(int ac, char **av)
@@ -116,6 +116,8 @@ t_ls		*init_ls(int ac, char **av)
 		ft_exit(2, ls);
 	if (ls->flags & FLG_LWR_H)
 		ft_exit(3, ls);
+	if (ls->flags & FLAG_LD_UR)
+		ls->flags &= FLAG_TO_NULL_R;
 	set_sort_func(ls);
 	set_first_args(ac, av, ls);
 	return (ls);

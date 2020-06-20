@@ -67,6 +67,8 @@ enum	e_position_flag_bits {
 # define FLAG_TO_NULL_EXCEPT_M ~(FLAG_LONG_LIST | FLG_UPR_C | FLG_LWR_X)
 # define FLAG_MANY_COLS (FLG_UPR_C | FLG_LWR_X)
 # define FLAG_TO_NULL_ONE_COL ~(FLAG_LONG_LIST | FLG_UPR_1 | FLG_LWR_M)
+# define FLAG_LD_UR (FLG_LWR_D | FLG_UPR_R)
+# define FLAG_TO_NULL_R ~FLG_UPR_R
 
 # define ERR_FLAG_FAIL "Wrong flag here"
 # define ERR_HELP "Use help"
@@ -77,6 +79,7 @@ enum	e_position_flag_bits {
 
 typedef struct		s_heap {
 	char			**arr;
+	char			**out;
 	int				first;
 	int				last;
 	int				size;
@@ -85,7 +88,8 @@ typedef struct		s_heap {
 # define START_HEAP_SIZE 1
 # define COEF_HEAP_INC 2
 
-void 		*get_heap_max(t_heap *heap, int (*f)(const char *, const char *));
+char		*get_heap_min(t_heap *heap);
+char		*get_heap_max(t_heap *heap);
 void		heap_sort(t_heap *heap, int (*f)(const char *, const char *));
 int			add_heap_elem(t_heap **heap, char *data, \
 										int (*f)(const char *, const char *));
@@ -105,7 +109,8 @@ typedef struct		s_stack {
 }					t_stack;
 
 t_heap	*get_stack(t_stack *stack);
-void 	push_stack(t_stack **stack, void *data);
+t_stack	*new_stack(t_heap *data);
+void 	push_stack(t_stack **stack, t_stack *new);
 void 	pop_stack(t_stack **stack);
 
 typedef struct		s_ls {

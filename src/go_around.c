@@ -1,20 +1,30 @@
 #include "my_ls.h"
 
-t_heap	*parse_dir(t_heap *heap, int (*func)(const char *, const char *))
+static t_heap	*parse_dir(t_heap *heap, unsigned flags, int (*func)(const char *, const char *))
 {
 	return (NULL);
 }
 
-void 	work_ls(t_ls *ls)
+void 			work_ls(t_ls *ls)
 {
-	t_heap		*cur_level;
-	t_heap		*new_level;
+	char		*file;
+	t_heap		*level_cur;
+	t_heap		*level_new;
+	t_stack		*stack_new;
 
-	while ((cur_level = get_stack(ls->stack)))
+	stack_new = NULL;
+	while ((level_cur = get_stack(ls->stack)))
 	{
-		if ((new_level = parse_dir(cur_level, ls->func)))
-			push_stack(&ls->stack, new_level);
-		else
-			pop_stack(&ls->stack);
+		while ((file = get_heap_min(level_cur)))
+		{
+			if ((level_new = parse_dir(&level_cur, ls->func)))
+				push_stack(&stack_new, new_stack(level_new));
+		}
+		pop_stack(&ls->stack);
+		if (stack_new)
+		{
+			push_stack(&ls->stack, stack_new);
+			stack_new = NULL;
+		}
 	}
 }

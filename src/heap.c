@@ -67,6 +67,7 @@ int 		add_heap_elem(t_heap **heap, char *data, int (*func)(const char *, const c
 				return (1);
 			(*heap)->first = 0;
 			(*heap)->last = 1;
+			(*heap)->out = NULL;
 			(*heap)->size = START_HEAP_SIZE;
 			if (!((*heap)->arr = (char **) malloc(sizeof(char *) * (*heap)->size)))
 			{
@@ -89,9 +90,16 @@ int 		add_heap_elem(t_heap **heap, char *data, int (*func)(const char *, const c
 	return (0);
 }
 
-void 		*get_heap_max(t_heap *heap, int (*func)(const char *, const char *))
+char 		*get_heap_max(t_heap *heap)
 {
 	if (heap->first == heap->last)
 		return (NULL);
-	return (heap->first != heap->last ? *(heap->arr + ++heap->first - 1) : NULL);
+	return (*(heap->arr + ++heap->first - 1));
+}
+
+char 		*get_heap_min(t_heap *heap)
+{
+	if (heap->last == heap->first)
+		return (NULL);
+	return (*(heap->arr + --heap->last));
 }
