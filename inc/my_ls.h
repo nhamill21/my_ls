@@ -115,9 +115,13 @@ typedef struct		s_ls {
 }					t_ls;
 
 t_ls	*init_ls(int ac, char **av);
+void 	work_ls(t_ls *ls);
 int		ft_exit(int status, t_ls *ls);
 
+char 	*ft_pathjoin(const char *s1, const char *s2);
 
-void 	print_log(unsigned flag);
+void 	test_heap(t_ls *ls);
+void 	print_flags(unsigned flag);
+void	print_dirent(const char *name);
 
 #endif
