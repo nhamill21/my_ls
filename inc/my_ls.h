@@ -113,20 +113,26 @@ t_stack	*new_stack(t_heap *data);
 void 	push_stack(t_stack **stack, t_stack *new);
 void 	pop_stack(t_stack **stack);
 
+# define MINOR_PROBLEMS 1
+# define SERIOUS_TROUBLE 2
+
 typedef struct		s_ls {
+	int				exit;
 	unsigned		flags;
 	int 			(*func)(const char *s1, const char *s2);
 	t_stack			*stack;
 }					t_ls;
 
 t_ls	*init_ls(int ac, char **av);
-void 	work_ls(t_ls *ls);
 int		ft_exit(int status, t_ls *ls);
+void	flag_dir(t_ls *ls);
+void	print_out(t_heap *heap, unsigned flags);
 
 char 	*ft_pathjoin(const char *s1, const char *s2);
 
 void 	test_heap(t_ls *ls);
 void 	print_flags(unsigned flag);
 void	print_dirent(const char *name);
+void	print_dir(t_heap *heap);
 
 #endif

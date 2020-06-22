@@ -66,6 +66,7 @@ static t_ls	*get_fresh_ls(void)
 		free(ls);
 		return (NULL);
 	}
+	ls->exit = 0;
 	ls->stack = NULL;
 	ls->flags = FLAG_DEFAULT;
 	return (ls);
@@ -116,8 +117,6 @@ t_ls		*init_ls(int ac, char **av)
 		ft_exit(2, ls);
 	if (ls->flags & FLG_LWR_H)
 		ft_exit(3, ls);
-	if (ls->flags & FLAG_LD_UR)
-		ls->flags &= FLAG_TO_NULL_R;
 	set_sort_func(ls);
 	set_first_args(ac, av, ls);
 	return (ls);

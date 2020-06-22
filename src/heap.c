@@ -63,24 +63,28 @@ int 		add_heap_elem(t_heap **heap, char *data, int (*func)(const char *, const c
 	{
 		if (!*heap)
 		{
-			if (!(*heap = (t_heap *) malloc(sizeof(t_heap))))
+			if (!(*heap = (t_heap *)malloc(sizeof(t_heap))))
 				return (1);
 			(*heap)->first = 0;
 			(*heap)->last = 1;
-			(*heap)->out = NULL;
 			(*heap)->size = START_HEAP_SIZE;
-			if (!((*heap)->arr = (char **) malloc(sizeof(char *) * (*heap)->size)))
+//			char **str;
+//			if (!(str = (char **)malloc(sizeof(char *) * (*heap)->size)))
+//				;
+			if (!((*heap)->arr = (char **)malloc(sizeof(char *) * (*heap)->size)))
 			{
 				free(*heap);
 				return (1);
 			}
+			(*heap)->out = NULL;
 			*((*heap)->arr) = data;
-		} else if (heap && data)
+		}
+		else
 		{
 			if ((*heap)->last == (*heap)->size)
 			{
 				(*heap)->size *= COEF_HEAP_INC;
-				(*heap)->arr = realloc((*heap)->arr, (*heap)->size * sizeof(void *));
+				(*heap)->arr = realloc((*heap)->arr, (*heap)->size * sizeof(char *));
 			}
 			*((*heap)->arr + (*heap)->last) = data;
 			(*heap)->last++;
@@ -94,12 +98,14 @@ char 		*get_heap_max(t_heap *heap)
 {
 	if (heap->first == heap->last)
 		return (NULL);
-	return (*(heap->arr + ++heap->first - 1));
+	heap->first++;
+	return (*(heap->arr + heap->first - 1));
 }
 
 char 		*get_heap_min(t_heap *heap)
 {
 	if (heap->last == heap->first)
 		return (NULL);
-	return (*(heap->arr + --heap->last));
+	heap->last--;
+	return (*(heap->arr + heap->last));
 }
