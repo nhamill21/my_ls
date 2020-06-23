@@ -68,9 +68,6 @@ int 		add_heap_elem(t_heap **heap, char *data, int (*func)(const char *, const c
 			(*heap)->first = 0;
 			(*heap)->last = 1;
 			(*heap)->size = START_HEAP_SIZE;
-//			char **str;
-//			if (!(str = (char **)malloc(sizeof(char *) * (*heap)->size)))
-//				;
 			if (!((*heap)->arr = (char **)malloc(sizeof(char *) * (*heap)->size)))
 			{
 				free(*heap);

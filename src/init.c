@@ -86,24 +86,55 @@ static void	set_sort_func(t_ls *ls)
 		ls->func = NULL;
 }
 
+static int	add_files_dirs(char *name, t_heap **dirs, t_heap **files, t_ls *ls)
+{
+	DIR		*dr;
+
+	errno = 0;
+	if ((dr = opendir(name)))
+	{
+		closedir(dr);
+		if (add_heap_elem((ls->flags & FLG_LWR_D ? files : dirs), strdup(name), ls->func))
+			return (1);
+	}
+	else if (errno == ENOTDIR)
+	{
+		if (add_heap_elem(files, strdup(name), ls->func))
+			return (1);
+	}
+	else
+	{
+		perror(name);
+		ls->exit = SERIOUS_TROUBLE;
+	}
+	return (0);
+}
+
 static void	set_first_args(int ac, char **av, t_ls *ls)
 {
 	size_t	i;
-	t_heap	*heap;
+	t_heap	*dirs;
+	t_heap	*files;
 
 	i = 1;
-	heap = NULL;
+	dirs = NULL;
+	files = NULL;
 	while (i < ac)
 	{
 		if (*(av + i))
-			if (add_heap_elem(&heap, *(av + i), ls->func))
+			if (add_files_dirs(*(av + i), &dirs, &files, ls))
+			{
+//				free_heap(dirs);
+//				free_heap(files);
 				ft_exit(4, ls);
+			}
 		i++;
 	}
-	if (!heap)
-		if (add_heap_elem(&heap, ".", NULL))
+	if (!dirs && !files)
+		if (add_heap_elem(&dirs, strdup("."), ls->func))
 			ft_exit(4, ls);
-	push_stack(&ls->stack, new_stack(heap));
+	push_stack(&ls->stack, new_stack(dirs));
+	push_stack(&ls->stack, new_stack(files));
 }
 
 t_ls		*init_ls(int ac, char **av)

@@ -125,8 +125,10 @@ typedef struct		s_ls {
 
 t_ls	*init_ls(int ac, char **av);
 int		ft_exit(int status, t_ls *ls);
-void	flag_dir(t_ls *ls);
+void	flag_dir(t_heap  *heap, t_ls *ls);
+void	wo_dir_an_recursive(t_ls *ls);
 void	print_out(t_heap *heap, unsigned flags);
+char	*get_file_out(char *str, unsigned flags);
 
 char 	*ft_pathjoin(const char *s1, const char *s2);
 
