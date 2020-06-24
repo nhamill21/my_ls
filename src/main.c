@@ -3,10 +3,9 @@
 static void switch_ls(t_ls *ls)
 {
 	if (ls->flags & FLG_LWR_D)
-		flag_dir(get_stack(ls), ls);
+		flag_dir(get_stack(ls->stack), ls);
 	else if (ls->flags & FLG_UPR_R)
-		;
-//		flag_recursive(ls);
+		flag_recursive(ls);
 	else
 		wo_dir_an_recursive(ls);
 }

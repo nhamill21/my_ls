@@ -28,14 +28,16 @@ static void		work_with_dir(t_ls *ls)
 	size_t	i;
 	t_heap	*heap;
 
-	heap = get_stack(ls->stack);
-	if ((i = heap->last))
+	if ((heap = get_stack(ls->stack)))
 	{
-		while (i--)
+		if ((i = heap->last))
 		{
-			printf(heap->last != 1 ? "%s:\n" : "", *(heap->arr + i));
-			flag_dir(get_files(*(heap->arr + i), ls), ls);
-			printf(i ? "\n" : "");
+			while (i--)
+			{
+				printf(heap->last != 1 ? "%s:\n" : "", *(heap->arr + i));
+				flag_dir(get_files(*(heap->arr + i), ls), ls);
+				printf(i ? "\n" : "");
+			}
 		}
 	}
 }

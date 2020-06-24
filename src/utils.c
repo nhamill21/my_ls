@@ -2,5 +2,9 @@
 
 char		*get_file_out(char *str, unsigned flags)
 {
-	return (str);
+	char	*s;
+
+	if (!(s = strrchr(str, '/')))
+		return (str);
+	return (s + 1);
 }

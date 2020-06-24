@@ -14,10 +14,17 @@ t_list	*ft_lstnew(void *data)
 
 void 	ft_lstadd(t_list **alst, t_list *new)
 {
+	t_list	*tmp;
+
 	if (new)
 	{
 		if (alst && *alst)
-			new->next = *alst;
+		{
+			tmp = new;
+			while (tmp->next)
+				tmp = tmp->next;
+			tmp->next = *alst;
+		}
 		*alst = new;
 	}
 
